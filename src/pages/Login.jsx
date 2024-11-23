@@ -19,7 +19,7 @@ export const Login = () => {
         { email, password },
         { withCredentials: true }
       );
-
+      localStorage.setItem("login", "true");
       setAuth(true);
     } catch (err) {
       console.log(err);

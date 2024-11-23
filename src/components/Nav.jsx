@@ -7,7 +7,7 @@ import { LoginContext } from "../App";
 import axios from "axios";
 
 export const Nav = () => {
-  const { auth, setAuth } = useContext(LoginContext);
+  const { auth, setAuth, admin, setAdmin } = useContext(LoginContext);
   const [log, setLog] = useState(null);
 
   const onLogout = async () => {
@@ -15,15 +15,20 @@ export const Nav = () => {
       await axios.get("http://localhost:3000/users/logout", {
         withCredentials: true,
       });
-
+      localStorage.setItem("login", "false");
+      // setAuth(false);
       setAuth(false);
+      setAdmin(false);
     } catch (err) {
       console.log(err);
     }
   };
+  // let auth = localStorage.getItem("login");
 
   const ShowAuth = () => {
-    return auth === true ? (
+    console.log("showauth " + auth);
+    setAuth(localStorage.getItem("login") === "true" ? true : false);
+    return auth ? (
       <button className="btn1" onClick={onLogout}>
         Logout
       </button>
@@ -38,8 +43,25 @@ export const Nav = () => {
       </div>
     );
   };
+
+  const fetchAdminStatus = async () => {
+    if (auth) {
+      try {
+        await axios.get("http://localhost:3000/admin/isadmin", {
+          withCredentials: true,
+        });
+        setAdmin(true);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setAdmin(false);
+    }
+  };
+
   useEffect(() => {
     setLog(ShowAuth);
+    fetchAdminStatus();
   }, [auth]);
 
   return (
@@ -55,7 +77,11 @@ export const Nav = () => {
         <Link to="/cart">
           <FontAwesomeIcon icon={faCartShopping} />
         </Link>
-
+        {admin && (
+          <Link to="/admin">
+            <span>Admin</span>
+          </Link>
+        )}
         {log}
       </div>
     </header>
