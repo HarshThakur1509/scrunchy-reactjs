@@ -22,10 +22,21 @@ const client = new QueryClient({
 function App() {
   const [auth, setAuth] = useState(false);
   const [admin, setAdmin] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
+
   return (
     <div className="App">
       <QueryClientProvider client={client}>
-        <LoginContext.Provider value={{ auth, setAuth, admin, setAdmin }}>
+        <LoginContext.Provider
+          value={{
+            auth,
+            setAuth,
+            admin,
+            setAdmin,
+            userDetails,
+            setUserDetails,
+          }}
+        >
           <Router>
             <Nav />
             <Routes>

@@ -9,6 +9,7 @@ import axios from "axios";
 export const Nav = () => {
   const { auth, setAuth, admin, setAdmin } = useContext(LoginContext);
   const [log, setLog] = useState(null);
+  const { setUserDetails } = useContext(LoginContext);
 
   const onLogout = async () => {
     try {
@@ -16,17 +17,14 @@ export const Nav = () => {
         withCredentials: true,
       });
       localStorage.setItem("login", "false");
-      // setAuth(false);
       setAuth(false);
       setAdmin(false);
     } catch (err) {
       console.log(err);
     }
   };
-  // let auth = localStorage.getItem("login");
 
   const ShowAuth = () => {
-    console.log("showauth " + auth);
     setAuth(localStorage.getItem("login") === "true" ? true : false);
     return auth ? (
       <button className="btn1" onClick={onLogout}>
@@ -59,9 +57,26 @@ export const Nav = () => {
     }
   };
 
+  const fetchUserDetails = async () => {
+    if (auth) {
+      try {
+        const res = await axios.get("http://localhost:3000/users/validate", {
+          withCredentials: true,
+        });
+
+        setUserDetails(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      console.log("Cannot fetch user details");
+    }
+  };
+
   useEffect(() => {
     setLog(ShowAuth);
     fetchAdminStatus();
+    fetchUserDetails();
   }, [auth]);
 
   return (
