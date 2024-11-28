@@ -1,53 +1,61 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import s1 from "../static/images/s1.jpg";
-import s2 from "../static/images/s2.jpg";
-import s3 from "../static/images/s3.jpg";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 export const Home = () => {
-  const products = () => {
+  // Fetch products
+  const fetchProducts = () => {
     return fetch("http://localhost:3000/products", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     }).then((res) => res.json());
   };
 
-  const { data } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["products"],
-    queryFn: products,
+    queryFn: fetchProducts,
   });
+
+  // Mutation for adding to cart
+  const addToCartMutation = useMutation({
+    mutationFn: async (id) => {
+      await axios.post(`http://localhost:3000/cart/add/${id}`, null, {
+        withCredentials: true,
+      });
+    },
+  });
+
+  const handleAddToCart = (id) => {
+    addToCartMutation.mutate(id);
+  };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+  if (isError) {
+    return <p>Error!</p>;
+  }
 
   return (
     <section className="product-section">
       <div className="container">
         <h2>Featured Products</h2>
         <div className="row">
-          <div className="card">
-            <img className="card-img-top" src={s1} alt="Product 1" />
-            <div className="card-body">
-              <h5 className="card-title pro-name">Product 1</h5>
-              <p className="card-text pro-price">Rs. 1000</p>
+          {data.map((product) => (
+            <div className="card" key={product.ID}>
+              <img className="card-img-top" src={s1} alt={product.Name} />
+              <div className="card-body">
+                <h5 className="card-title pro-name">{product.Name}</h5>
+                <p className="card-text pro-price">Rs. {product.Price}</p>
+                <button onClick={() => handleAddToCart(product.ID)}>
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+              </div>
             </div>
-          </div>
-
-          <div className="card">
-            <img className="card-img-top" src={s2} alt="Product 2" />
-            <div className="card-body">
-              <h5 className="card-title pro-name">Product 2</h5>
-              <p className="card-text pro-price">Rs. 1000</p>
-            </div>
-          </div>
-
-          <div className="card">
-            <img className="card-img-top" src={s3} alt="Product 3" />
-            <div className="card-body">
-              <h5 className="card-title pro-name">Product 3</h5>
-              <p className="card-text pro-price">Rs. 1000</p>
-            </div>
-          </div>
+          ))}
         </div>
-        {data?.map((val) => {
-          return <h1 key={val.ID}>{val.Name}</h1>;
-        })}
       </div>
     </section>
   );

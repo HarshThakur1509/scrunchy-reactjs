@@ -11,12 +11,12 @@ import { Nav } from "./components/Nav";
 
 export const LoginContext = createContext();
 const client = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 5, // 5 minutes
-    },
-  },
+  // defaultOptions: {
+  //   queries: {
+  //     refetchOnWindowFocus: false,
+  //     staleTime: 1000 * 60 * 5, // 5 minutes
+  //   },
+  // },
 });
 
 function App() {

@@ -58,29 +58,22 @@ export const AdminStatus = () => {
   };
 
   const handleSetButtonClick = async (id, isAdmin) => {
-    console.log(`Updating user ${id} admin status to: ${isAdmin}`);
-
     try {
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:3000/admin/status/${id}`,
         { admin: isAdmin }, // Include the updated admin status
         { withCredentials: true }
       );
-      console.log(`Response for user ${id}:`, response.data);
     } catch (error) {
       console.error(`Error updating user ${id}:`, error);
     }
   };
 
   const handleDeleteUser = async (id) => {
-    console.log(`Deleting user with ID: ${id}`);
-
     try {
-      const response = await axios.delete(
-        `http://localhost:3000/admin/delete/${id}`,
-        { withCredentials: true }
-      );
-      console.log(`User ${id} deleted successfully`, response.data);
+      await axios.delete(`http://localhost:3000/admin/delete/${id}`, {
+        withCredentials: true,
+      });
 
       // Update the state to remove the deleted user
       setList((prevList) => prevList.filter((user) => user.ID !== id));

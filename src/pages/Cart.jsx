@@ -1,62 +1,42 @@
-import s1 from "../static/images/s1.jpg";
-import s2 from "../static/images/s2.jpg";
+import { CartItems } from "../components/CartItems";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 export const Cart = () => {
+  // Fetch cart items from the API
+  const {
+    data: cartItems,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["cartItems"],
+    queryFn: async () => {
+      const response = await axios.get("http://localhost:3000/cart", {
+        withCredentials: true,
+      });
+      return response.data;
+    },
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error fetching cart items...</div>;
+
+  // Calculate the total amount of the cart
+  const TotalAmount = (items) => {
+    let total = 0;
+    items.forEach((item) => {
+      total += item.Quantity * item.Product.Price;
+    });
+    return total;
+  };
+
   return (
-    <section className="cart-section">
+    <section className="Cart">
       <div className="container">
         <h2>Your Cart</h2>
-        <div className="cart-items">
-          <div className="cart-item">
-            <div className="item-details">
-              <img src={s1} alt="Product 1" />
-              <div className="item-info">
-                <h5 className="pro-name">Product 1</h5>
-                <p className="pro-price">$10.00</p>
-              </div>
-            </div>
-            <div className="quantity ml-auto">
-              <button className="quantity-btn minus">
-                <i className="fa-solid fa-minus"></i>
-              </button>
-              <input
-                type="number"
-                className="quantity-input"
-                value="1"
-                min="1"
-              />
-              <button className="quantity-btn plus">
-                <i className="fa-solid fa-plus"></i>
-              </button>
-            </div>
-          </div>
-          <hr />
-          <div className="cart-item">
-            <div className="item-details">
-              <img src={s2} alt="Product 2" />
-              <div className="item-info">
-                <h5 className="pro-name">Product 2</h5>
-                <p className="pro-price">$15.00</p>
-              </div>
-            </div>
-            <div className="quantity ml-auto">
-              <button className="quantity-btn minus">
-                <i className="fa-solid fa-minus"></i>
-              </button>
-              <input
-                type="number"
-                className="quantity-input"
-                value="1"
-                min="1"
-              />
-              <button className="quantity-btn plus">
-                <i className="fa-solid fa-plus"></i>
-              </button>
-            </div>
-          </div>
-        </div>
+        <CartItems cartItems={cartItems} />
         <div className="cart-total">
-          <h4>Total: $25.00</h4>
+          <h4>Total: Rs. {TotalAmount(cartItems)}</h4>
           <button className="btn btn-primary">Checkout</button>
         </div>
       </div>
