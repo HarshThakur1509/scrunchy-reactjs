@@ -45,7 +45,11 @@ export const Home = () => {
         <div className="row">
           {data.map((product) => (
             <div className="card" key={product.ID}>
-              <img className="card-img-top" src={s1} alt={product.Name} />
+              <img
+                className="card-img-top"
+                src={`http://localhost:3000/${product.Image}`}
+                alt={product.Name}
+              />
               <div className="card-body">
                 <h5 className="card-title pro-name">{product.Name}</h5>
                 <p className="card-text pro-price">Rs. {product.Price}</p>
