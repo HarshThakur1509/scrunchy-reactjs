@@ -40,7 +40,11 @@ export const CartItems = ({ cartItems }) => {
         return (
           <div className="cart-item" key={cartItem.ID}>
             <div className="item-details">
-              <img src={s1} alt="Product 1" />
+              <img
+                className="card-img-top"
+                src={`http://localhost:3000/${cartItem.Product.Image}`}
+                alt={cartItem.Product.Name}
+              />
               <div className="item-info">
                 <h5 className="pro-name">{cartItem.Product.Name}</h5>
                 <p className="pro-price">

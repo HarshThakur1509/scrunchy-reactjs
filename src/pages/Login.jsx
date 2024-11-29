@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useContext } from "react";
 import { LoginContext } from "../App";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import axios from "axios";
 
 export const Login = () => {
@@ -59,6 +59,7 @@ export const Login = () => {
           Submit
         </button>
       </form>
+      <Link to="/forgot-password">Forgot Password</Link>
     </div>
   );
 };

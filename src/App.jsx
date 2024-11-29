@@ -8,6 +8,8 @@ import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Admin } from "./pages/Admin";
 import { Nav } from "./components/Nav";
+import { ForgotPassword } from "./components/ForgotPassword";
+import { ResetPassword } from "./components/ResetPassword";
 
 export const LoginContext = createContext();
 const client = new QueryClient({
@@ -45,6 +47,12 @@ function App() {
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/register" element={<Register />} />
               <Route exact path="/admin" element={<Admin />} />
+              <Route
+                exact
+                path="/forgot-password"
+                element={<ForgotPassword />}
+              />
+              <Route exact path="/reset-password" element={<ResetPassword />} />
               <Route exact path="*" element={<h1>PAGE NOT FOUND!!</h1>} />
             </Routes>
           </Router>
