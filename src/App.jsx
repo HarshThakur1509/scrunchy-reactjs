@@ -10,6 +10,7 @@ import { Admin } from "./pages/Admin";
 import { Nav } from "./components/Nav";
 import { ForgotPassword } from "./components/ForgotPassword";
 import { ResetPassword } from "./components/ResetPassword";
+import { Checkout } from "./components/Checkout";
 
 export const LoginContext = createContext();
 const client = new QueryClient({
@@ -53,6 +54,7 @@ function App() {
                 element={<ForgotPassword />}
               />
               <Route exact path="/reset-password" element={<ResetPassword />} />
+              <Route exact path="/checkout" element={<Checkout />} />
               <Route exact path="*" element={<h1>PAGE NOT FOUND!!</h1>} />
             </Routes>
           </Router>

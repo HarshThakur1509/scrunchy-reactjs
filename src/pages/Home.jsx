@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import s1 from "../static/images/s1.jpg";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";

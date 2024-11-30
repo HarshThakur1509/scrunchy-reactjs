@@ -10,13 +10,15 @@ export const Register = () => {
   const { auth, setAuth } = useContext(LoginContext);
 
   const onSubmit = async (formdata) => {
+    const name = formdata.name;
+    const phone = formdata.phone;
     const email = formdata.email;
     const password = formdata.password;
 
     try {
       await axios.post(
         "http://localhost:3000/users/signup",
-        { email, password },
+        { email, password, name, phone },
         { withCredentials: true }
       );
       await axios.post(
@@ -34,6 +36,8 @@ export const Register = () => {
   const schema = yup.object().shape({
     email: yup.string().required("email required"),
     password: yup.string().min(4).max(20).required(),
+    name: yup.string().required("Name required"),
+    phone: yup.string().required("Phone required"),
   });
 
   const {
@@ -52,6 +56,10 @@ export const Register = () => {
     <div className="Register">
       <h1>Register</h1>
       <form className="Form" onSubmit={handleSubmit(onSubmit)}>
+        <input type="text" placeholder="Name..." {...register("name")} />
+        <p>{errors.name?.message}</p>
+        <input type="text" placeholder="phone..." {...register("phone")} />
+        <p>{errors.phone?.message}</p>
         <input type="text" placeholder="email..." {...register("email")} />
         <p>{errors.email?.message}</p>
         <input
